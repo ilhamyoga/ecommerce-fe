@@ -1,5 +1,9 @@
+'use client';
+
 import Image from "next/image";
 import Link from "next/link";
+import ReduxProvider from "./StoreProvider";
+import { useAppSelector, useAppDispatch } from '../lib/hooks'
 
 const products = [
   { id: 1, name: "Sepatu", price: 120000 },
@@ -13,9 +17,10 @@ interface ProductItemProps {
   name: string;
   price: number;
   stock?: number;
+  onClick?: () => void;
 }
 
-function ProductItem({ name, price, stock }: ProductItemProps) {
+function ProductItem({ name, price, stock, onClick }: ProductItemProps) {
   return (
     <div className="flex flex-col gap-2 bg-white rounded p-3">
       <div className="w-24 h-24 bg-gray-100 rounded-md"></div>
@@ -24,14 +29,25 @@ function ProductItem({ name, price, stock }: ProductItemProps) {
         <p className="text-sm">Rp{price}</p>
         <p className="text-xs opacity-50">Stok: {stock}</p>
       </div>
-      <button className="p-1 rounded-md bg-blue-400">
+      <button className="p-1 rounded-md bg-blue-400" onClick={onClick}>
         Beli
       </button>
     </div>
   );
 }
 
-export default function Home() {
+function HomeLayout() {
+  const { isLogin } = useAppSelector((state) => state.auth)
+  const dispatch = useAppDispatch()
+
+  const handlePurchase = () => {
+    if (isLogin) {
+      console.log("Pembelian berhasil")
+    } else {
+      alert("Silahkan login terlebih dahulu")
+    }
+  }
+
   return (
     <main className="flex min-h-screen flex-col items-center p-10 md:p-24">
       <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
@@ -81,9 +97,18 @@ export default function Home() {
             name={item.name}
             price={item.price}
             stock={10}
+            onClick={handlePurchase}
           />
         ))}
       </div>
     </main>
+  );
+}
+
+export default function HomePage() {
+  return (
+    <ReduxProvider>
+      <HomeLayout />
+    </ReduxProvider>
   );
 }
