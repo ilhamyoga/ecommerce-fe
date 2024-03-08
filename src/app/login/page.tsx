@@ -1,13 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import { redirect } from 'next/navigation'
 import ReduxProvider from "../../app/StoreProvider";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { loginAction } from "@/lib/features/auth/authSlice";
 
 function LoginLayout() {
-  const { isLoading } = useAppSelector((state) => state.auth);
+  const { isLoading, isLogin } = useAppSelector((state) => state.auth);
   const dispatch = useAppDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -19,6 +20,13 @@ function LoginLayout() {
     }
     dispatch(loginAction({ email, password }));
   }
+
+  useEffect(() => {
+    if (isLogin) {
+      alert("Login berhasil");
+      redirect('/');
+    }
+  }, [isLogin]);
 
   return (
       <main className="flex min-h-screen flex-col items-center p-6 sm:p-12">

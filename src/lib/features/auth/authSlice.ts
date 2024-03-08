@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { loginApi } from "../../utils/api";
+import { getCookie, setCookie } from 'cookies-next';
 
 interface AuthState {
   isLoading: boolean;
@@ -9,7 +10,7 @@ interface AuthState {
 
 const initialState: AuthState = {
   isLoading: false,
-  isLogin: false,
+  isLogin: !!getCookie('auth_token'),
   data: {},
 };
 
@@ -42,7 +43,12 @@ export const loginAction = (payload: any) => async (dispatch: any) => {
       password: `${payload.password}salt_pass`,
     });
     const data = response.data;
+
+    // set cookie
+    setCookie('accessToken', data.data.accessToken);
+
     dispatch(login(data.data));
+    redirect('/');
   } catch (error: any) {
     alert(error?.response?.data?.message || "Terjadi kesalahan");
   } finally {
