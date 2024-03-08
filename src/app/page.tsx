@@ -12,18 +12,20 @@ const products = [
 interface ProductItemProps {
   name: string;
   price: number;
+  stock?: number;
 }
 
-function ProductItem({ name, price }: ProductItemProps) {
+function ProductItem({ name, price, stock }: ProductItemProps) {
   return (
     <div className="flex flex-col gap-2 bg-white rounded p-3">
       <div className="w-24 h-24 bg-gray-100 rounded-md"></div>
       <div>
         <h3 className="text-lg font-semibold">{name}</h3>
         <p className="text-sm">Rp{price}</p>
+        <p className="text-xs opacity-50">Stok: {stock}</p>
       </div>
       <button className="p-1 rounded-md bg-blue-400">
-        Tambah
+        Beli
       </button>
     </div>
   );
@@ -45,19 +47,6 @@ export default function Home() {
 
       <div className="mt-12 flex">
         <Link
-          href={"/cart"}
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Keranjang{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>Lihat barang yang kamu pilih</p>
-        </Link>
-        <Link
           href={"/login"}
           className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
           rel="noopener noreferrer"
@@ -70,6 +59,19 @@ export default function Home() {
           </h2>
           <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>Masuk ke akun kamu</p>
         </Link>
+        <Link
+          href={"/register"}
+          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
+          rel="noopener noreferrer"
+        >
+          <h2 className={`mb-3 text-2xl font-semibold`}>
+            Register{" "}
+            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
+              -&gt;
+            </span>
+          </h2>
+          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>Daftar akun baru</p>
+        </Link>
       </div>
 
       <div className="mt-5 gap-4 flex">
@@ -78,6 +80,7 @@ export default function Home() {
             key={item.id}
             name={item.name}
             price={item.price}
+            stock={10}
           />
         ))}
       </div>
